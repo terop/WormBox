@@ -6,129 +6,96 @@
 # Authors
 # Antti Nilakari <antti.nilakari@gmail.com>
 
-
 from encapsulation import marshal, unmarshal
 from encryption import decrypt, encrypt, InvalidCiphertext
 from key import Key
-import string
 
-
-# Default key 
+# Default key
 TEST_KEY = (
-	"IUFXNGLBOPTRQWMKZEYCVHJSAD\n"
-	"NMIAYQPUTRVLSGZBXHDKEFWCOJ\n"
-	"KDGAJIOMVHEXQNFCSYTRLBPZUW\n"
-	"YVCIWRQUTXLMHOZFDGKJNSBPEA\n"
-	"DFHELOPKCIQBNYMJSXGURWVATZ\n"
-	"JWCGATVIXFODBKMQEYPZULRNHS\n"
-	"BWFDAOSKUIEPNHVQJCGLZTXRYM\n"
-	"OHELSAUYTRXDWQFPVIJMCKGNZB\n"
-	"LJGUCXERWYDHPASIBVQTFOMZKN\n"
-	"TOVZQSAJMDYCFHKPUIBLWNGREX\n"
-	"UYDAPRKBXGMQWFLVCEZNOHSTJI\n"
-	"EJSWRVAPMHNBDXCQYZUGITLKOF\n"
-	"GLBYEMSDXITVHQAZWJOKUPFCNR\n"
-	"ANPKLMTXVCDISWZBHGQFJYRUEO\n"
-	"FCRDYELBQHXSTMOPUANZGWIKJV\n"
-	"SGAIEJNQKCRDZWLOMHYBTFVXUP\n"
-	"MYSBWLDXNATURJIVFGQOZPKHCE\n"
-	"PTKZSYUVEONAFXCIHMDJWBQRGL\n"
-	"QHTAWYDOSXGIENFJCKLZPRVMBU\n"
-	"WAJMQLSFIHZPCXOYKRUEBDNVGT\n"
-	"HGIASZVEPFWTQMODYKRLBNJUXC\n"
-	"ZNFDPBGMUJXRQWASLHCVETOKIY\n"
-	"REWGYANILMKTJBZPQCUSOVDXFH\n"
-	"CBYVJUENIXTZSLWKRADFMOHQPG\n"
-	"XWHNPDCJLBTIZSGEORAFMKVUYQ\n"
-	"VOYWNUGIQXEZFATBDRSHLJPMCK\n"
+    "IUFXNGLBOPTRQWMKZEYCVHJSAD\n"
+    "NMIAYQPUTRVLSGZBXHDKEFWCOJ\n"
+    "KDGAJIOMVHEXQNFCSYTRLBPZUW\n"
+    "YVCIWRQUTXLMHOZFDGKJNSBPEA\n"
+    "DFHELOPKCIQBNYMJSXGURWVATZ\n"
+    "JWCGATVIXFODBKMQEYPZULRNHS\n"
+    "BWFDAOSKUIEPNHVQJCGLZTXRYM\n"
+    "OHELSAUYTRXDWQFPVIJMCKGNZB\n"
+    "LJGUCXERWYDHPASIBVQTFOMZKN\n"
+    "TOVZQSAJMDYCFHKPUIBLWNGREX\n"
+    "UYDAPRKBXGMQWFLVCEZNOHSTJI\n"
+    "EJSWRVAPMHNBDXCQYZUGITLKOF\n"
+    "GLBYEMSDXITVHQAZWJOKUPFCNR\n"
+    "ANPKLMTXVCDISWZBHGQFJYRUEO\n"
+    "FCRDYELBQHXSTMOPUANZGWIKJV\n"
+    "SGAIEJNQKCRDZWLOMHYBTFVXUP\n"
+    "MYSBWLDXNATURJIVFGQOZPKHCE\n"
+    "PTKZSYUVEONAFXCIHMDJWBQRGL\n"
+    "QHTAWYDOSXGIENFJCKLZPRVMBU\n"
+    "WAJMQLSFIHZPCXOYKRUEBDNVGT\n"
+    "HGIASZVEPFWTQMODYKRLBNJUXC\n"
+    "ZNFDPBGMUJXRQWASLHCVETOKIY\n"
+    "REWGYANILMKTJBZPQCUSOVDXFH\n"
+    "CBYVJUENIXTZSLWKRADFMOHQPG\n"
+    "XWHNPDCJLBTIZSGEORAFMKVUYQ\n"
+    "VOYWNUGIQXEZFATBDRSHLJPMCK\n"
 )
 
 
 def read_until_empty_line(prefix=""):
-	lines = []
-	while True:
-		line = raw_input(prefix)
-		if len(line) == 0:
-			break;
-		lines.append(line)
-	return "\n".join(lines)
+    lines = []
+    while True:
+        line = raw_input(prefix)
+        if len(line) == 0:
+            break
+        lines.append(line)
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":
-	print
+    print
 
-	print "Loaded key:"
-	key = Key(TEST_KEY)
-	print key
-	
-	while True:
-		print
-		print "1. Encrypt"
-		print "2. Decrypt"
-		cmd = raw_input("> ")
+    print "Loaded key:"
+    key = Key(TEST_KEY)
+    print key
 
-		if cmd == "1":
-			print
-			print "Enter plaintext message:"
-			plaintext = read_until_empty_line("> ")
-	
-			marshaled = marshal(plaintext)
-			ciphertext = encrypt(marshaled, key.key)
-			print
-			print "Encrypted message:"
-			print ciphertext
+    while True:
+        print
+        print "1. Encrypt"
+        print "2. Decrypt"
+        print "e. Exit"
+        cmd = raw_input("> ")
 
-		elif cmd == "2":
-			print "Enter ciphertext message:"
-			try:
-				ciphertext = read_until_empty_line("> ")
-				print
-				print "Decrypted message:"
+        if cmd == "1":
+            print
+            print "Enter plaintext message (enter a newline to stop):"
+            plaintext = read_until_empty_line("> ")
 
-				marshaled = decrypt(ciphertext, key.key)
-				print
-				print marshaled
+            marshaled = marshal(plaintext)
+            ciphertext = encrypt(marshaled, key.key)
+            print
+            print "Encrypted message:"
+            print ciphertext
 
-				plaintext = unmarshal(marshaled)
-				print
-				print plaintext
-				
-			except InvalidCiphertext as e:
-				print e
-		
-		else:
-			break
-	
-	
-	"""
-	print "Enter message:"
-	message = read_until_empty_line("> ")
+        elif cmd == "2":
+            print "Enter ciphertext message (enter a newline to stop):"
+            try:
+                ciphertext = read_until_empty_line("> ")
+                print
+                print "Decrypted message:"
 
-	print "Encrypted message:"
-	marshaled = marshal(message)
-	print marshaled
+                marshaled = decrypt(ciphertext, key.key)
+                print
+                print marshaled
 
-	print "Decrypted message:"
-	unmarshaled = unmarshal(marshaled)
-	print unmarshaled
-	"""
+                plaintext = unmarshal(marshaled)
+                print
+                print plaintext
 
-	"""
-	ciphertext = (
-		"XSQBK GUNMH FWFQD HYTJZ LKUGQ"
-		"WATJS TJDRW DFCXR EDQFI YBPBW"
-		"VBRYD PDKPO WNTPI GNGSF DJPHY"
-		"GCHBK QSGFS ENEVQ QOMRO BWARD"
-		"SFYFI RLSAV"
-	)
+            except InvalidCiphertext as e:
+                print e
 
-	print "Decrypted: "
-	decrypted = encryption.decrypt(ciphertext, key.key)
-	print decrypted
+        elif cmd == "e":
+            break
 
-	human_readable = unmarshal(decrypted)
-	print "Human readable:"
-	print human_readable
-	"""
-
-
+        else:
+            print "Invalid command, try again"
