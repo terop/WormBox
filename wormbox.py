@@ -6,12 +6,9 @@
 # Authors
 # Antti Nilakari <antti.nilakari@gmail.com>
 
-
 from encapsulation import marshal, unmarshal
 from encryption import decrypt, encrypt, InvalidCiphertext
 from key import Key
-import string
-
 
 # Default key
 TEST_KEY = (
@@ -65,11 +62,12 @@ if __name__ == "__main__":
         print
         print "1. Encrypt"
         print "2. Decrypt"
+        print "e. Exit"
         cmd = raw_input("> ")
 
         if cmd == "1":
             print
-            print "Enter plaintext message:"
+            print "Enter plaintext message (enter a newline to stop):"
             plaintext = read_until_empty_line("> ")
 
             marshaled = marshal(plaintext)
@@ -79,7 +77,7 @@ if __name__ == "__main__":
             print ciphertext
 
         elif cmd == "2":
-            print "Enter ciphertext message:"
+            print "Enter ciphertext message (enter a newline to stop):"
             try:
                 ciphertext = read_until_empty_line("> ")
                 print
@@ -96,37 +94,8 @@ if __name__ == "__main__":
             except InvalidCiphertext as e:
                 print e
 
-        else:
-
+        elif cmd == "e":
             break
 
-    """
-	print "Enter message:"
-	message = read_until_empty_line("> ")
-
-	print "Encrypted message:"
-	marshaled = marshal(message)
-	print marshaled
-
-	print "Decrypted message:"
-	unmarshaled = unmarshal(marshaled)
-	print unmarshaled
-	"""
-
-    """
-	ciphertext = (
-		"XSQBK GUNMH FWFQD HYTJZ LKUGQ"
-		"WATJS TJDRW DFCXR EDQFI YBPBW"
-		"VBRYD PDKPO WNTPI GNGSF DJPHY"
-		"GCHBK QSGFS ENEVQ QOMRO BWARD"
-		"SFYFI RLSAV"
-	)
-
-	print "Decrypted: "
-	decrypted = encryption.decrypt(ciphertext, key.key)
-	print decrypted
-
-	human_readable = unmarshal(decrypted)
-	print "Human readable:"
-	print human_readable
-	"""
+        else:
+            print "Invalid command, try again"
