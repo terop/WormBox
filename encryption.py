@@ -69,6 +69,30 @@ def random_start_pos(key):
 
     return row, col, refgroup
 
+def is_group_ref_group(group, key):
+    """Determines whether the provided group is a reference group. Returns
+    True if it is and False otherwise."""
+    # FIXME this is hardcoded for PIAEL order
+    north_index = key[0].find(group[0])
+    east_column = ''.join([key[i][25] for i in range(26)])
+    east_index = east_column.find(group[1])
+
+    if key[east_index][north_index] != group[2] or key[25][north_index] != group[3] \
+    or key[east_index][0] != group[4]:
+        return False
+
+    return True
+
+def find_ref_group(groups, key):
+    """Finds the reference group from the provided group. Returns the
+    group index or -1 if the group cannot be found."""
+    for index, group in enumerate(groups):
+        if len(group) != 5:
+            return -1
+        if is_group_ref_group(group, key):
+            return index
+
+    return -1
 
 def decrypt_group(group, key, row, col):
     import string
@@ -96,12 +120,13 @@ def decrypt(ciphertext, key):
 
     groups = [packed[i:i + 5] for i in range(0, len(packed), 5)]
 
-    try:
-        reference_group = groups[REF_GROUP - 1]
-        del groups[REF_GROUP - 1]
-    except IndexError:
-        reference_group = groups[-1]
-        del groups[-1]
+    ref_group_index = find_ref_group(groups, key)
+    if ref_group_index == -1:
+        raise InvalidCiphertext(
+            "Could not find the reference group from the ciphertext")
+
+    reference_group = groups[ref_group_index]
+    del groups[ref_group_index]
 
     col_shift_count = 0
     row, col = find_start_pos(reference_group, key)
