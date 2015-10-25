@@ -106,12 +106,10 @@ if __name__ == "__main__":
                 print "Decrypted message:"
 
                 marshaled = decrypt(ciphertext, key.key)
-                print
-                print marshaled
+                print "Marshaled:", marshaled
 
                 plaintext = unmarshal(marshaled)
-                print
-                print plaintext
+                print "Decrypted:", plaintext
 
             except InvalidCiphertext as e:
                 print e
